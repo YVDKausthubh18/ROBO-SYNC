@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboSync | AI Humanoid</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #1E1E1E;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.2);
+        }
+
+        h1 {
+            color: #FFD700;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px;
+        }
+
+        .video-section, .chat-section {
+            width: 45%;
+            padding: 20px;
+            background: #222;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.2);
+            margin: 15px;
+        }
+
+        #video {
+            width: 100%;
+            max-width: 500px;
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+        }
+
+        #chatbox {
+            background: #333;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        input, button {
+            padding: 10px;
+            margin-top: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            background: #FFD700;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #FFC107;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 15px;
+            background: #1E1E1E;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🤖 RoboSync | AI Humanoid</h1>
+        <p>Welcome to the future of AI-powered humanoid assistance</p>
+    </header>
+
+    <section class="container">
+        <div class="video-section">
+            <h2>🎥 Live Camera Feed</h2>
+            <img id="video" src="http://YOUR-FLASK-SERVER-IP:5000/video_feed" alt="Live ESP32-CAM Feed">
+        </div>
+
+        <div class="chat-section">
+            <h2>💬 Chat with RoboSync</h2>
+            <div id="chatbox">
+                <p><b>RoboSync:</b> Hi! How can I assist you?</p>
+                <input type="text" id="userInput" placeholder="Type your message here..." />
+                <button onclick="sendMessage()">Send</button>
+                <p id="response"></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 RoboSync | Designed by YVD Kausthubh</p>
+    </footer>
+
+    <script>
+        function sendMessage() {
+            let userMessage = document.getElementById("userInput").value;
+            document.getElementById("response").innerHTML = "<b>You:</b> " + userMessage;
+
+            setTimeout(() => {
+                document.getElementById("response").innerHTML += "<br><b>RoboSync:</b> I'm still learning! 🚀";
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>
