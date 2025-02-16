@@ -23,6 +23,7 @@
             background: #1E1E1E;
             padding: 20px;
             box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.3);
+            position: relative;
         }
 
         h1 {
@@ -118,6 +119,7 @@
         <div class="video-section">
             <h2>🎥 Live Camera Feed</h2>
             <img id="video" src="http://192.168.1.6:81/stream" alt="Live ESP32-CAM Feed">
+            <p id="cam-status" style="color: red;"></p>
         </div>
 
         <div class="chat-section">
@@ -137,6 +139,21 @@
     </footer>
 
     <script>
+        // Automatically refresh the ESP32-CAM feed every 500ms
+        function refreshCam() {
+            let videoElement = document.getElementById("video");
+            videoElement.src = "http://192.168.1.6:81/stream?" + new Date().getTime();
+        }
+        setInterval(refreshCam, 500);
+
+        // Check if the ESP32-CAM is online
+        function checkCameraStatus() {
+            fetch("http://192.168.1.6:81/stream", { mode: 'no-cors' })
+                .then(() => document.getElementById("cam-status").innerText = "")
+                .catch(() => document.getElementById("cam-status").innerText = "⚠ Camera Offline");
+        }
+        setInterval(checkCameraStatus, 3000); // Check every 3 seconds
+
         function sendMessage() {
             let userMessage = document.getElementById("userInput").value;
             document.getElementById("response").innerHTML = "<b>You:</b> " + userMessage;
