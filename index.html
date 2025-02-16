@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoboSync | AI Humanoid</title>
     <style>
-        /* Global Styles */
         * {
             margin: 0;
             padding: 0;
@@ -118,7 +117,7 @@
     <section class="container">
         <div class="video-section">
             <h2>🎥 Live Camera Feed</h2>
-            <img id="video" src="http://YOUR-FLASK-SERVER-IP:5000/video_feed" alt="Live ESP32-CAM Feed">
+            <img id="video" src="http://YOUR-RASPBERRY-PI-IP:5000/video_feed" alt="Live ESP32-CAM Feed">
         </div>
 
         <div class="chat-section">
@@ -126,6 +125,7 @@
             <div id="chatbox">
                 <p><b>RoboSync:</b> Hi! How can I assist you?</p>
                 <input type="text" id="userInput" placeholder="Type your message here..." />
+                <button onclick="startListening()">🎤 Speak</button>
                 <button onclick="sendMessage()">Send</button>
                 <p id="response"></p>
             </div>
@@ -141,9 +141,39 @@
             let userMessage = document.getElementById("userInput").value;
             document.getElementById("response").innerHTML = "<b>You:</b> " + userMessage;
 
-            setTimeout(() => {
-                document.getElementById("response").innerHTML += "<br><b>RoboSync:</b> I'm still learning! 🚀";
-            }, 1000);
+            fetch("http://YOUR-RASPBERRY-PI-IP:5000/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("response").innerHTML += "<br><b>RoboSync:</b> " + data.response;
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        function startListening() {
+            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+
+            recognition.onresult = function(event) {
+                let userText = event.results[0][0].transcript;
+                document.getElementById("response").innerHTML = "<b>You:</b> " + userText;
+
+                fetch("http://YOUR-RASPBERRY-PI-IP:5000/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: userText })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("response").innerHTML += "<br><b>RoboSync:</b> " + data.response;
+                })
+                .catch(error => console.error("Error:", error));
+            };
+
+            recognition.start();
         }
 
         function toggleDarkMode() {
